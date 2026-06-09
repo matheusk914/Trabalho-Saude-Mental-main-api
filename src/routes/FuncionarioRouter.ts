@@ -5,10 +5,10 @@ import { AuthorizationMiddleware } from "../middlewares/AuthorizationMiddleware"
 
 const router = Router();
 
-router.get("/",  FuncionarioController.listarFuncionarios);
+router.get("/", FuncionarioController.listarFuncionarios);
 router.get("/:id", FuncionarioController.detalharFuncionario);
-router.post("/",  AuthMiddleware.authenticate, AuthorizationMiddleware.authorizeAdminOnly, FuncionarioController.cadastrarFuncionario);
-router.put("/:id",  AuthMiddleware.authenticate, AuthorizationMiddleware.authorizeOwner, FuncionarioController.atualizarFuncionario);
-router.delete("/:id",  AuthMiddleware.authenticate, AuthorizationMiddleware.authorizeOwner, FuncionarioController.removerFuncionario);
+router.post("/", AuthMiddleware.authenticate, AuthorizationMiddleware.authorizeAdminOnly, FuncionarioController.cadastrarFuncionario);
+router.put("/:id", AuthMiddleware.authenticate, AuthorizationMiddleware.authorizeAdminOnly, FuncionarioController.atualizarFuncionario);
+router.delete("/:id", AuthMiddleware.authenticate, AuthorizationMiddleware.authorizeAdminOnly, FuncionarioController.removerFuncionario);
 
 export default router;

@@ -8,7 +8,7 @@ class FuncionarioController {
       const funcionarios = await FuncionarioBusiness.listar();
       res.status(200).json(funcionarios);
     } catch (error: any) {
-      res.status(500).json({ message: "Erro interno ao listar funcionários." });
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -19,20 +19,24 @@ class FuncionarioController {
       if (funcionario) {
         res.status(200).json(funcionario);
       } else {
-        res.status(404).json({ message: "Funcionário não encontrado." });
+        res.status(404).json({ error: "Funcionário não encontrado." });
       }
     } catch (error: any) {
-      res.status(500).json({ message: "Erro interno ao detalhar funcionário." });
+      res.status(500).json({ error: error.message });
     }
   }
 
   async cadastrarFuncionario(req: Request, res: Response): Promise<void> {
     try {
       const novoFuncionario: Funcionario = req.body;
-      const funcionarioCriado = await FuncionarioBusiness.cadastrar(novoFuncionario);
-      res.status(201).json(funcionarioCriado);
+      const resultado = await FuncionarioBusiness.cadastrar(novoFuncionario);
+      if (resultado && "error" in resultado) {
+        res.status(400).json(resultado);
+        return;
+      }
+      res.status(201).json(resultado);
     } catch (error: any) {
-      res.status(500).json({ message: "Erro interno ao cadastrar funcionário." });
+      res.status(400).json({ error: error.message });
     }
   }
 
@@ -44,10 +48,10 @@ class FuncionarioController {
       if (funcionarioAtualizado) {
         res.status(200).json(funcionarioAtualizado);
       } else {
-        res.status(404).json({ message: "Funcionário não encontrado." });
+        res.status(404).json({ error: "Funcionário não encontrado." });
       }
     } catch (error: any) {
-      res.status(500).json({ message: "Erro interno ao atualizar funcionário." });
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -58,10 +62,10 @@ class FuncionarioController {
       if (sucesso) {
         res.status(204).send();
       } else {
-        res.status(404).json({ message: "Funcionário não encontrado." });
+        res.status(404).json({ error: "Funcionário não encontrado." });
       }
     } catch (error: any) {
-      res.status(500).json({ message: "Erro interno ao remover funcionário." });
+      res.status(500).json({ error: error.message });
     }
   }
 }

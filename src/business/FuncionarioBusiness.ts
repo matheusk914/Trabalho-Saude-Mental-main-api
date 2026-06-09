@@ -21,8 +21,8 @@ class FuncionarioBusiness {
   async cadastrar(
     dados: Funcionario
   ): Promise<Funcionario | { error: string } | undefined> {
-    if (!dados.nome || !dados.cargo || !dados.email || !dados.senha || dados.servico_id) {
-      throw new Error("Nome, cargo, email, senha e o ID do local de atuação são obrigatórios.");
+    if (!dados.nome || !dados.cargo || !dados.email || !dados.senha) {
+      throw new Error("Nome, cargo, email e senha são obrigatórios.");
     }
 
     const funcionarioExistente = await FuncionarioData.findByEmail(dados.email);
