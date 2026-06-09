@@ -14,8 +14,8 @@ export class ServicosController {
 
     createServico = async (req: Request, res: Response): Promise<void> => {
         try {
-            const { nome, tipo, cidade, endereco, telefone, gratuito, categoria } = req.body;
-            const servicoDto = new CreateServicoDto(nome, tipo, cidade, endereco, telefone, gratuito, categoria);
+            const { nome, tipo, cidade, endereco, telefone, gratuito, categoria, latitude, longitude } = req.body;
+            const servicoDto = new CreateServicoDto(nome, tipo, cidade, endereco, telefone, gratuito, categoria, latitude, longitude);
             const newServico = await this.servicosBusiness.createServico(servicoDto);
             res.status(201).send(newServico);
         } catch (error: any) {
@@ -64,8 +64,8 @@ export class ServicosController {
     updateServico = async (req: Request, res: Response): Promise<void> => {
         try {
             const id = Number(req.params.id);
-            const { nome, tipo, cidade, endereco, telefone, gratuito, categoria } = req.body;
-            const servicoDto = new UpdateServicoDto(nome, tipo, cidade, endereco, telefone, gratuito, categoria);
+            const { nome, tipo, cidade, endereco, telefone, gratuito, categoria, latitude, longitude } = req.body;
+            const servicoDto = new UpdateServicoDto(nome, tipo, cidade, endereco, telefone, gratuito, categoria, latitude, longitude);
             const updatedServico = await this.servicosBusiness.updateServico(id, servicoDto);
             if (updatedServico) {
                 res.status(200).send(updatedServico);

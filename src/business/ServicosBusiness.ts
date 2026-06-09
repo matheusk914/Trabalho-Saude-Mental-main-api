@@ -17,22 +17,31 @@ export class ServicosBusiness {
     }
 
     async createServico(servicoDto: CreateServicoDto): Promise<Servicos> {
-        if (!GOOGLE_API_KEY) {
-            throw new GoogleMapsAPIError("A chave GOOGLE_MAPS_API_KEY não está configurada.");
-        }
         try {
-            const fullAddress = servicoDto.endereco + ", " + servicoDto.cidade; 
-            
-            const { latitude, longitude } = await this.geoService.getCoordenadas(
-                fullAddress,
-                GOOGLE_API_KEY
-            );
+            const hasManualCoordinates = Number.isFinite(servicoDto.latitude) && Number.isFinite(servicoDto.longitude);
+
+            if (hasManualCoordinates) {
+                const dadosParaSalvar = {
+                    ...servicoDto,
+                    latitude: servicoDto.latitude,
+                    longitude: servicoDto.longitude,
+                } as Servicos;
+
+                return this.servicosData.create(dadosParaSalvar);
+            }
+
+            if (!GOOGLE_API_KEY) {
+                throw new GoogleMapsAPIError("A chave GOOGLE_MAPS_API_KEY não está configurada.");
+            }
+
+            const fullAddress = `${servicoDto.endereco}, ${servicoDto.cidade}`.trim();
+            const { latitude, longitude } = await this.geoService.getCoordenadas(fullAddress, GOOGLE_API_KEY);
 
             const dadosParaSalvar = {
-                ...servicoDto, 
-                latitude: latitude, 
-                longitude: longitude, 
-            } as Servicos; 
+                ...servicoDto,
+                latitude,
+                longitude,
+            } as Servicos;
 
             return this.servicosData.create(dadosParaSalvar);
         } catch (error: any) {
@@ -58,6 +67,12 @@ export class ServicosBusiness {
         if (!id) {
             throw new ValidationError('ID do serviço é obrigatório.');
         }
+
+        const hasManualCoordinates = Number.isFinite(servicoDto.latitude) && Number.isFinite(servicoDto.longitude);
+        if (hasManualCoordinates) {
+            return this.servicosData.update(id, servicoDto as Partial<Servicos>);
+        }
+
         return this.servicosData.update(id, servicoDto as Partial<Servicos>);
     }
 
