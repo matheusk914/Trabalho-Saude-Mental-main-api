@@ -1,11 +1,7 @@
 const { Client } = require('pg');
 
 const client = new Client({
-  host: 'dpg-d8u29cdaeets73fmhde0-a.oregon-postgres.render.com',
-  port: 5432,
-  database: 'saude_mental_db2',
-  user: 'saude_mental_db2_user',
-  password: 'bRp0jq3hXnxwV3i8YZFtaRZCRDtBvmid',
+  connectionString: 'postgresql://saude_mental_db2_user:bRpOjq3hXnxwV3i8YZFtaRZCRDtBvmid@dpg-d8u29cdaeets73fmhde0-a.oregon-postgres.render.com/saude_mental_db2',
   ssl: { rejectUnauthorized: false }
 });
 
