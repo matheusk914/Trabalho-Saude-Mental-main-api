@@ -1,9 +1,3 @@
-// Script para popular o banco com clínicas de exemplo
-//
-// Como usar:
-//   1. Coloque esse arquivo na pasta Trabalho-Saude-Mental
-//   2. Execute: node popular-banco.js
-
 const { Client } = require('pg');
 
 const client = new Client({
